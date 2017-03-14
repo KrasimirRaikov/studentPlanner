@@ -1,3 +1,3 @@
-#### web app: GAE-SiteBricks
+# studentPlanner
 
-Starts demo server on Google API Engine with SiteBricks servlet api 
+users have subjects which contain program for the subject, and can be added exam date when in term

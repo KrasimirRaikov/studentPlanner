@@ -6,8 +6,8 @@ import com.google.inject.servlet.GuiceServletContextListener;
 
 public class GuiceListener extends GuiceServletContextListener {
 
-    @Override
-    protected Injector getInjector() {
-       return Guice.createInjector(new AppModule());
-    }
+  @Override
+  protected Injector getInjector() {
+    return Guice.createInjector(new AppModule(),new RepositoryModule());
+  }
 }
