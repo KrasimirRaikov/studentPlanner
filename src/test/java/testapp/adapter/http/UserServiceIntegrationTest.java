@@ -10,6 +10,7 @@ import testapp.core.User;
 import testapp.core.UserDto;
 import testapp.core.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -31,24 +32,24 @@ public class UserServiceIntegrationTest {
 
   @Test
   public void registerUser() throws Exception {
-    final UserDto userDto = new UserDto(1, "Vasil", Collections.<Integer>emptyList());
-    Request request=new FakeRequest<UserDto>(userDto);
+    final UserDto userDto = new UserDto(1, "Vasil", new ArrayList<Long>());
+    Request request = new FakeRequest<UserDto>(userDto);
     Reply<?> registerReply = userService.registerUser(request);
     assertThat(registerReply, isOk());
   }
 
   @Test
   public void userAlreadyRegistered() throws Exception {
-    userRepository.register(new User(1, "Vasil", Collections.<Integer>emptyList()));
-    final UserDto userDto = new UserDto(1, "Vasil", Collections.<Integer>emptyList());
-    Request request=new FakeRequest<UserDto>(userDto);
+    userRepository.register(new User(1, "Vasil", new ArrayList<Long>()));
+    final UserDto userDto = new UserDto(1, "Vasil", new ArrayList<Long>());
+    Request request = new FakeRequest<UserDto>(userDto);
     Reply<?> registerReply = userService.registerUser(request);
     assertThat(registerReply, isBadRequest());
   }
 
   @Test
   public void deletingUsers() throws Exception {
-    userRepository.register(new User(1, "Vasil", Collections.<Integer>emptyList()));
+    userRepository.register(new User(1, "Vasil", new ArrayList<Long>()));
     Reply<?> deleteReply = userService.deleteUserById(1);
     assertThat(deleteReply, isOk());
   }
@@ -57,7 +58,7 @@ public class UserServiceIntegrationTest {
   public void deletingNonExistentUser() throws Exception {
     UserRepository userRepository = new InMemoryUserRepository();
     UserService userService = new UserService(userRepository);
-    userRepository.register(new User(2, "Qni", Collections.<Integer>emptyList()));
+    userRepository.register(new User(2, "Qni", new ArrayList<Long>()));
     Reply<?> deleteReply = userService.deleteUserById(1);
     assertThat(deleteReply, isBadRequest());
   }
@@ -66,14 +67,14 @@ public class UserServiceIntegrationTest {
   public void findUserById() throws Exception {
     UserRepository userRepository = new InMemoryUserRepository();
     UserService userService = new UserService(userRepository);
-    User user = new User(2, "Qni", Collections.<Integer>emptyList());
+    User user = new User(2, "Qni", new ArrayList<Long>());
     userRepository.register(user);
-    final UserDto userDto = new UserDto(2, "Qni", Collections.<Integer>emptyList());
-    Reply<?> findUserReply = userService.findUserById(2);
+    final UserDto userDto = new UserDto(2, "Qni", new ArrayList<Long>());
+    Reply<?> findUserReply = userService.findUser(2);
     Reply<?> expectedReply = Reply.with(userDto).as(Json.class);
     assertThat(findUserReply, returns(expectedReply));
     assertThat(findUserReply, containsJson(aNewJson()
-            .add("id", 2)
+            .add("facultyNumber", 2)
             .add("name", "Qni")
             .add("subjects", Collections.<String>emptyList())));
   }
@@ -82,22 +83,22 @@ public class UserServiceIntegrationTest {
   public void tryingToFindNonExistentUser() throws Exception {
     UserRepository userRepository = new InMemoryUserRepository();
     UserService userService = new UserService(userRepository);
-    userRepository.register(new User(2, "Qni", Collections.<Integer>emptyList()));
-    Reply<?> findNonExistentReply = userService.findUserById(1);
+    userRepository.register(new User(2, "Qni", new ArrayList<Long>()));
+    Reply<?> findNonExistentReply = userService.findUser(1);
     assertThat(findNonExistentReply, isBadRequest());
   }
 
   @Test
   public void getAllUsers() throws Exception {
     UserRepository userRepository = new InMemoryUserRepository(new LinkedList<User>() {{
-      add(new User(1, "Vasko", Collections.<Integer>emptyList()));
-      add(new User(2, "Qni", Collections.<Integer>emptyList()));
+      add(new User(1, "Vasko", new ArrayList<Long>()));
+      add(new User(2, "Qni", new ArrayList<Long>()));
     }});
     UserService userService = new UserService(userRepository);
     Reply<?> findAllReply = userService.getUsers();
     assertThat(findAllReply, containsJson(
             aNewJsonArray().withElements(
-                    aNewJson().add("id", 1).add("name", "Vasko").add("subjects", Collections.<String>emptyList()),
-                    aNewJson().add("id", 2).add("name", "Qni").add("subjects", Collections.<String>emptyList()))));
+                    aNewJson().add("facultyNumber", 1).add("name", "Vasko").add("subjects", Collections.<String>emptyList()),
+                    aNewJson().add("facultyNumber", 2).add("name", "Qni").add("subjects", Collections.<String>emptyList()))));
   }
 }

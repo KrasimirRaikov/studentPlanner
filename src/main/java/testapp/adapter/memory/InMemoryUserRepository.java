@@ -2,7 +2,6 @@ package testapp.adapter.memory;
 
 import testapp.core.User;
 import testapp.core.UserRepository;
-import testapp.core.exceptions.UserDoesNotExistException;
 import testapp.core.exceptions.UserNotFoundException;
 import testapp.core.exceptions.UsernameAlreadyExistsException;
 
@@ -26,9 +25,9 @@ public class InMemoryUserRepository implements UserRepository {
   }
 
   @Override
-  public User findUser(Integer userId) {
+  public User findUser(Integer facultyNumber) {
     for (User user : userList) {
-      if (user.getId().equals(userId)) {
+      if (user.getFacultyNumber().equals(facultyNumber)) {
         return user;
       }
     }
@@ -46,13 +45,13 @@ public class InMemoryUserRepository implements UserRepository {
   }
 
   @Override
-  public void delete(Integer userId) {
+  public void delete(Integer facultyNumber) {
     for (User each : userList) {
-      if (Objects.equals(each.getId(), userId)) {
+      if (Objects.equals(each.getFacultyNumber(), facultyNumber)) {
         userList.remove(each);
         return;
       } else {
-        throw new UserDoesNotExistException();
+        throw new UserNotFoundException();
       }
     }
   }
