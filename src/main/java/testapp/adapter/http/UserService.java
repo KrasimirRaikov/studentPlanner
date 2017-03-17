@@ -12,7 +12,6 @@ import com.google.sitebricks.http.Post;
 import testapp.core.User;
 import testapp.core.UserDto;
 import testapp.core.UserRepository;
-import testapp.core.exceptions.UserDoesNotExistException;
 import testapp.core.exceptions.UserNotFoundException;
 import testapp.core.exceptions.UsernameAlreadyExistsException;
 
@@ -34,10 +33,10 @@ public class UserService {
   }
 
   @Get
-  @At("/:userId")
-  public Reply<?> findUserById(Integer userId) {
+  @At("/v1/:facultyNumber")
+  public Reply<?> findUser(@Named("facultyNumber")Integer facultyNumber) {
     try {
-      User user = repository.findUser(userId);
+      User user = repository.findUser(facultyNumber);
       return Reply.with(UserDto.fromUser(user)).as(Json.class);
     } catch (UserNotFoundException e) {
       return Reply.saying().badRequest();
@@ -56,11 +55,11 @@ public class UserService {
   }
 
   @Delete
-  @At("/:userId")
-  public Reply<?> deleteUserById(@Named("userId") Integer userId) {
+  @At("/v1/:facultyNumber")
+  public Reply<?> deleteUserById(@Named("facultyNumber")Integer facultyNumber) {
     try {
-      repository.delete(userId);
-    } catch (UserDoesNotExistException e) {
+      repository.delete(facultyNumber);
+    } catch (UserNotFoundException e) {
       return Reply.saying().badRequest();
     }
     return Reply.saying().ok();

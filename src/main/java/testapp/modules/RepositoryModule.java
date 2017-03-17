@@ -3,6 +3,7 @@ package testapp.modules;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 import testapp.adapter.memory.InMemoryUserRepository;
+import testapp.adapter.memory.PersistentUserRepository;
 import testapp.core.UserRepository;
 
 /**
@@ -11,6 +12,6 @@ import testapp.core.UserRepository;
 public class RepositoryModule extends AbstractModule {
   @Override
   protected void configure() {
-    bind(UserRepository.class).to(InMemoryUserRepository.class).in(Scopes.SINGLETON);
+    bind(UserRepository.class).to(PersistentUserRepository.class).in(Scopes.SINGLETON);
   }
 }

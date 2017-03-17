@@ -7,34 +7,37 @@ import java.util.List;
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
  */
 public class UserDto {
-  private Integer id;
+  private Integer facultyNumber;
   private String name;
-  private List<Integer> subjects;
+  private List<Long> subjects;
 
-  public UserDto(Integer id, String name, List<Integer> subjects) {
-    this.id = id;
+  public UserDto() {
+  }
+
+  public UserDto(Integer facultyNumber, String name, List<Long> subjects) {
+    this.facultyNumber = facultyNumber;
     this.name = name;
     this.subjects = subjects;
   }
 
-  public Integer getId() {
-    return id;
+  public Integer getFacultyNumber() {
+    return facultyNumber;
   }
 
   public String getName() {
     return name;
   }
 
-  public List<Integer> getSubjects() {
+  public List<Long> getSubjects() {
     return subjects;
   }
 
   public User toUser() {
-    return new User(id, name, subjects);
+    return new User(facultyNumber, name,  subjects);
   }
 
   public static UserDto fromUser(User user) {
-    return new UserDto(user.getId(), user.getName(), user.getSubjects());
+    return new UserDto(user.getFacultyNumber(), user.getName(), user.getSubjects());
   }
 
   public static List<UserDto> fromUsers(List<User> users) {

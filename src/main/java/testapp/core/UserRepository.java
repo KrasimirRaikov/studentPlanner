@@ -7,9 +7,9 @@ public interface UserRepository {
 
   List<User> findUsers();
 
-  User findUser(Integer userId);
+  User findUser(Integer facultyNumber);
 
   void register(User user);
 
-  void delete(Integer userId);
+  void delete(Integer facultyNumber);
 }

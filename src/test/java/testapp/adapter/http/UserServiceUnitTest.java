@@ -10,11 +10,10 @@ import org.junit.Test;
 import testapp.core.User;
 import testapp.core.UserDto;
 import testapp.core.UserRepository;
-import testapp.core.exceptions.UserDoesNotExistException;
 import testapp.core.exceptions.UserNotFoundException;
 import testapp.core.exceptions.UsernameAlreadyExistsException;
 
-import java.util.Collections;
+import java.util.ArrayList;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -36,7 +35,7 @@ public class UserServiceUnitTest {
 
   @Test
   public void registerUser() throws Exception {
-    final UserDto userDto = new UserDto(1, "Vasil", Collections.<Integer>emptyList());
+    final UserDto userDto = new UserDto(1, "Vasil", new ArrayList<Long>());
     Request request = new FakeRequest<UserDto>(userDto);
     context.checking(new Expectations() {{
       oneOf(repository).register(userDto.toUser());
@@ -46,7 +45,7 @@ public class UserServiceUnitTest {
 
   @Test
   public void registerExistingUser() throws Exception {
-    final UserDto userDto = new UserDto(1, "Vasil", Collections.<Integer>emptyList());
+    final UserDto userDto = new UserDto(1, "Vasil", new ArrayList<Long>());
     Request request = new FakeRequest<UserDto>(userDto);
     context.checking(new Expectations() {{
       oneOf(repository).register(userDto.toUser());
@@ -61,7 +60,7 @@ public class UserServiceUnitTest {
       oneOf(repository).findUser(1);
       will(returnValue(new User()));
     }});
-    userService.findUserById(1);
+    userService.findUser(1);
   }
 
   @Test
@@ -70,7 +69,7 @@ public class UserServiceUnitTest {
       oneOf(repository).findUser(1);
       will(throwException(new UserNotFoundException()));
     }});
-    userService.findUserById(1);
+    userService.findUser(1);
   }
 
   @Test
@@ -85,7 +84,7 @@ public class UserServiceUnitTest {
   public void tryingToDeleteNonExistingUser() throws Exception {
     context.checking(new Expectations() {{
       oneOf(repository).delete(1);
-      will(throwException(new UserDoesNotExistException()));
+      will(throwException(new UserNotFoundException()));
     }});
     userService.deleteUserById(1);
   }

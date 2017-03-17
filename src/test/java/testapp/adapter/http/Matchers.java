@@ -10,6 +10,7 @@ import testapp.core.User;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Vasil Mitov <v.mitov.clouway@gmail.com>
@@ -20,7 +21,7 @@ public class Matchers {
       @Override
       protected boolean matchesSafely(List<User> item) {
         for (User each : item) {
-          if (each.getId() == user.getId()) {
+          if (each.getFacultyNumber() == user.getFacultyNumber()) {
             return true;
           }
         }
@@ -66,7 +67,10 @@ public class Matchers {
     return new TypeSafeMatcher<User>() {
       @Override
       protected boolean matchesSafely(User item) {
-        return user.getId() == item.getId();
+        return Objects.equals(user.getFacultyNumber(), item.getFacultyNumber())
+                && Objects.equals(user.getName(), item.getName())
+                && item.getSubjects().containsAll(user.getSubjects());
+
       }
 
       @Override
